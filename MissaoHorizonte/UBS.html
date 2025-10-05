@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon Mission - NASA Space Apps</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #8FC1B5;
+            color: #265C4B;
+        }
+
+        /* Styled Header */
+        header {
+            background: linear-gradient(90deg, #265C4B, #146551);
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            color: #BFE0D7;
+        }
+
+        nav a {
+            margin-left: 1rem;
+            text-decoration: none;
+            font-size: 0.95rem;
+            color: #fff;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        nav a::after {
+            content: "";
+            display: block;
+            width: 0%;
+            height: 2px;
+            background: #8FC1B5;
+            transition: width 0.3s;
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #8FC1B5;
+        }
+
+        /* Fullscreen map with border */
+        #map {
+            width: 90%;
+            max-width: 1200px;
+            height: calc(100vh - 120px);
+            margin: 2rem auto;
+            border-radius: 12px;
+            border: 3px solid #146551;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            background: #265C4B;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1><i class="fa-solid fa-heart-pulse"></i> Horizon Mission</h1>
+            <p>Health for vulnerable communities and people with disabilities</p>
+        </div>
+        <nav>
+            <a href="#about"><i class="fa-solid fa-info-circle"></i> About</a>
+            <a href="#functioning"><i class="fa-solid fa-gears"></i> How It Works</a>
+            <a href="#partners"><i class="fa-solid fa-handshake"></i> Partners</a>
+            <a href="#resources"><i class="fa-solid fa-folder-open"></i> Resources</a>
+            <a href="#faq"><i class="fa-solid fa-question-circle"></i> FAQ</a>
+        </nav>
+    </header>
+
+    <div id="map"></div>
+
+    <footer>
+        <p>©<span id="year"></span> EcoPulse - Horizon Mission</p>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        const map = L.map('map').setView([-18.9186, -48.2772], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        fetch("ubs_geocoded.json")
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(ubs => {
+                    if (ubs.lat && ubs.lng) {
+                        L.marker([ubs.lat, ubs.lng])
+                            .addTo(map)
+                            .bindPopup(`<b>${ubs.name}</b><br>${ubs.address}`);
+                    }
+                });
+            });
+    </script>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+</body>
+
+</html>

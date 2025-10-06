@@ -9,7 +9,8 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -34,9 +35,17 @@
         }
 
         @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         header h1 {
@@ -81,6 +90,36 @@
             color: #8FC1B5;
         }
 
+        .link1 {
+            margin-left: 1rem;
+            text-decoration: none;
+            font-size: 0.95rem;
+            color: #fff;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .link1::after {
+            content: "";
+            display: block;
+            width: 0%;
+            height: 2px;
+            background: #8FC1B5;
+            transition: width 0.3s;
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+        }
+
+        .link1:hover::after {
+            width: 100%;
+        }
+
+        .link1:hover {
+            color: #8FC1B5;
+        }
+
         /* Fullscreen map with border */
         #map {
             width: 90%;
@@ -89,7 +128,8 @@
             margin: 2rem auto;
             border-radius: 12px;
             border: 3px solid #146551;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            overlay: hidden;
         }
 
         footer {
@@ -107,6 +147,7 @@
 
 <body>
     <header>
+        <p><a class="link1" href="Index.html">Voltar</a></p>
         <div>
             <h1><i class="fa-solid fa-heart-pulse"></i> Horizon Mission</h1>
             <p>Health for vulnerable communities and people with disabilities</p>
@@ -118,6 +159,7 @@
             <a href="#resources"><i class="fa-solid fa-folder-open"></i> Resources</a>
             <a href="#faq"><i class="fa-solid fa-question-circle"></i> FAQ</a>
         </nav>
+
     </header>
 
     <div id="map"></div>
@@ -131,7 +173,9 @@
     <script>
         document.getElementById("year").textContent = new Date().getFullYear();
 
-        const map = L.map('map').setView([-18.9186, -48.2772], 12);
+        const map = L.map('map', {
+            zoomControl: false
+        }).setView([-18.9186, -48.2772], 12);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -149,6 +193,10 @@
                     }
                 });
             });
+        
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
     </script>
 
     <div vw class="enabled">
